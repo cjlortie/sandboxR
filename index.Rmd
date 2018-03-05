@@ -14,17 +14,40 @@ output:
 <br>
 
 #Sandbox for niceR code   
-A set of data and challenges.
+A set of data and challenges.  
 <br>
 ![](./enchiridion.jpg)
-<br>
+<br>  
 
 
 ###Challenge 1. Iteration  
 I want to apply a function to a dataframe indexed by a single vector for now but could imagine by more than one vector.  Seems like a nice lapply solution, but I have some difficiulty in getting it to work. Next, I tried purr::map.  No dice.  I do not want to use for loops.
 
+tried here too
+http://adv-r.had.co.nz/Functionals.html
 ```{r, CH1, warning=FALSE, message=FALSE}
 library(tidyverse)
 data <- read_csv("data/iteration.csv")
+data
+
+#generate a UDF
+#Coefficient of variation
+#x is a vector in a df that is a measure of some sort such as length, size, etc
+cv <- function(x){
+  mean(x)/sd(x)
+}
+
+#lm
+#x here is the entire df and x and y are vectors within the dataframe
+m <- function(x){
+  lm(x$y~x$x)
+}
+
+#now, I want to apply a function to each species in the dataframe without splicing into separate dfs
+
+#data %>% map(unique(data$species), cv(data$x)) #nope
+#test <-  sapply(names(data$species), cv(data$x)) #no
+#unlist(lapply(data$x, cv)) #no
+#etc... what am I missing here!
 
 ```
