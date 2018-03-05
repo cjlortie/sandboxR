@@ -1,0 +1,30 @@
+---
+title:
+author: "cjlortie"
+date: "2018"
+output:
+  html_document:
+    theme: lumen
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+<br>
+
+#Sandbox for niceR code   
+A set of data and challenges.
+<br>
+![](./enchiridion.jpg)
+<br>
+
+
+###Challenge 1. Iteration  
+I want to apply a function to a dataframe indexed by a single vector for now but could imagine by more than one vector.  Seems like a nice lapply solution, but I have some difficiulty in getting it to work. Next, I tried purr::map.  No dice.  I do not want to use for loops.
+
+```{r, CH1, warning=FALSE, message=FALSE}
+library(tidyverse)
+data <- read_csv("data/iteration.csv")
+
+```
