@@ -43,6 +43,16 @@ m <- function(x){
   lm(x$y~x$x)
 }
 
+m2 <- function(df, x, y){
+  lm(df$y~df$x)
+}
+
+m2(data, data$x, data$y)
+
+m3 <- function(x,y){
+  lm(y~x)
+}
+
 #now, I want to apply a function to each species in the dataframe without splicing into separate dfs
 
 #data %>% map(unique(data$species), cv(data$x)) #nope
@@ -66,6 +76,10 @@ by(data, as.factor(data$species), sum)
 
 data %>% 
   group_by(species) %>%
-  map_int(mean(x))
+  summarise(cv(x)) #map returns same length of vector so need summarise
+
+data %>% 
+  group_by(species) %>%
+  summarise(m3(x, y))
 
 ```
