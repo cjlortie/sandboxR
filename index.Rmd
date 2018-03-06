@@ -58,6 +58,11 @@ models <- data %>%
   do(fit = lm(y~x, data =.))
 tidy(models, fit)
 
+#solution c.
+data %>% split(.$species) %>%
+  map(~ lm(y~x, data =.)) %>%
+  map(summary) 
+
 #failed attempts####
 #data %>% map(unique(data$species), cv(data$x)) #nope
 #test <-  sapply(names(data$species), cv(data$x)) #no
