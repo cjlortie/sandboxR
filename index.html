@@ -263,7 +263,13 @@ m &lt;- function(x){
 #data %&gt;% map(unique(data$species), cv(data$x)) #nope
 #test &lt;-  sapply(names(data$species), cv(data$x)) #no
 #unlist(lapply(data$x, cv)) #no
-#etc... what am I missing here!</code></pre>
+#etc... what am I missing here!
+
+#outcome &lt;- data %&gt;% 
+  #group_by(species) %&gt;% 
+  #do(lm(data$y~data$x))
+
+#outcome</code></pre>
 </div>
 </div>
 

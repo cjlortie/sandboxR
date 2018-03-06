@@ -50,4 +50,14 @@ m <- function(x){
 #unlist(lapply(data$x, cv)) #no
 #etc... what am I missing here!
 
+#outcome <- data %>% 
+  #group_by(species) %>% 
+  #do(lm(data$y~data$x))
+
+#outcome
+
+data %>% 
+  group_by(species) %>% 
+  do(lm(y~x, data=.))
+
 ```
