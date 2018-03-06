@@ -60,4 +60,12 @@ data %>%
   group_by(species) %>% 
   do(lm(y~x, data=.))
 
+by(data, as.factor(data$species), cv(data$x))
+
+by(data, as.factor(data$species), sum)
+
+data %>% 
+  group_by(species) %>%
+  map_int(mean(x))
+
 ```
