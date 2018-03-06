@@ -27,6 +27,7 @@ tried here too
 http://adv-r.had.co.nz/Functionals.html
 ```{r, CH1, warning=FALSE, message=FALSE}
 library(tidyverse)
+library(broom)
 data <- read_csv("data/iteration.csv")
 data
 
@@ -43,18 +44,21 @@ m <- function(x){
   lm(x$y~x$x)
 }
 
-m2 <- function(df, x, y){
-  lm(df$y~df$x)
-}
-
-m2(data, data$x, data$y)
-
-m3 <- function(x,y){
-  lm(y~x)
-}
 
 #now, I want to apply a function to each species in the dataframe without splicing into separate dfs
 
+#solution a. IF you want to return a df
+data %>% 
+  group_by(species) %>%
+  summarise(cv(x)) 
+
+#solution b. IF you are returning a list
+models <- data %>% 
+  group_by(species) %>% 
+  do(fit = lm(y~x, data =.))
+tidy(models, fit)
+
+#failed attempts####
 #data %>% map(unique(data$species), cv(data$x)) #nope
 #test <-  sapply(names(data$species), cv(data$x)) #no
 #unlist(lapply(data$x, cv)) #no
@@ -65,21 +69,12 @@ m3 <- function(x,y){
   #do(lm(data$y~data$x))
 
 #outcome
+#by(data, as.factor(data$species), cv(data$x))
+#by(data, as.factor(data$species), sum)
+#map
+#lapply ugg
 
-data %>% 
-  group_by(species) %>% 
-  do(lm(y~x, data=.))
 
-by(data, as.factor(data$species), cv(data$x))
 
-by(data, as.factor(data$species), sum)
-
-data %>% 
-  group_by(species) %>%
-  summarise(cv(x)) #map returns same length of vector so need summarise
-
-data %>% 
-  group_by(species) %>%
-  summarise(m3(x, y))
 
 ```

@@ -231,6 +231,7 @@ div.tocify {
 <p>I want to apply a function to a dataframe indexed by a single vector for now but could imagine by more than one vector. Seems like a nice lapply solution, but I have some difficiulty in getting it to work. Next, I tried purr::map. No dice. I do not want to use for loops.</p>
 <p>tried here too <a href="http://adv-r.had.co.nz/Functionals.html" class="uri">http://adv-r.had.co.nz/Functionals.html</a></p>
 <pre class="r"><code>library(tidyverse)
+library(broom)
 data &lt;- read_csv(&quot;data/iteration.csv&quot;)
 data</code></pre>
 <pre><code>## # A tibble: 9 x 5
@@ -258,8 +259,35 @@ m &lt;- function(x){
   lm(x$y~x$x)
 }
 
+
 #now, I want to apply a function to each species in the dataframe without splicing into separate dfs
 
+#solution a. IF you want to return a df
+data %&gt;% 
+  group_by(species) %&gt;%
+  summarise(cv(x)) </code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   species `cv(x)`
+##   &lt;chr&gt;     &lt;dbl&gt;
+## 1 a          2.70
+## 2 b          3.47
+## 3 c         11.0</code></pre>
+<pre class="r"><code>#solution b. IF you are returning a list
+models &lt;- data %&gt;% 
+  group_by(species) %&gt;% 
+  do(fit = lm(y~x, data =.))
+tidy(models, fit)</code></pre>
+<pre><code>## # A tibble: 6 x 6
+## # Groups:   species [3]
+##   species term        estimate             std.error   statistic   p.value
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;                 &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+## 1 a       (Intercept)    -1.00 0.000000000000000442   -  2.26e¹⁵  2.82e⁻¹⁶
+## 2 a       x               1.00 0.0000000000000000977     1.02e¹⁶  6.22e⁻¹⁷
+## 3 b       (Intercept)    -1.00 0.000000000000000560   -  1.78e¹⁵  3.57e⁻¹⁶
+## 4 b       x               1.00 0.000000000000000174      5.74e¹⁵  1.11e⁻¹⁶
+## 5 c       (Intercept)    -1.00 0                      -Inf        0       
+## 6 c       x               1.00 0                       Inf        0</code></pre>
+<pre class="r"><code>#failed attempts####
 #data %&gt;% map(unique(data$species), cv(data$x)) #nope
 #test &lt;-  sapply(names(data$species), cv(data$x)) #no
 #unlist(lapply(data$x, cv)) #no
@@ -269,7 +297,11 @@ m &lt;- function(x){
   #group_by(species) %&gt;% 
   #do(lm(data$y~data$x))
 
-#outcome</code></pre>
+#outcome
+#by(data, as.factor(data$species), cv(data$x))
+#by(data, as.factor(data$species), sum)
+#map
+#lapply ugg</code></pre>
 </div>
 </div>
 
