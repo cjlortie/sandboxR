@@ -290,7 +290,7 @@ tidy(models, fit)</code></pre>
 <pre class="r"><code>#solution c.
 data %&gt;% split(.$species) %&gt;%
   map(~ lm(y~x, data =.)) %&gt;%
-  map(summary) </code></pre>
+  map(summary) #%&gt;%</code></pre>
 <pre><code>## $a
 ## 
 ## Call:
@@ -352,7 +352,9 @@ data %&gt;% split(.$species) %&gt;%
 ## Residual standard error: 0 on 1 degrees of freedom
 ## Multiple R-squared:      1,  Adjusted R-squared:      1 
 ## F-statistic:   Inf on 1 and 1 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code>#failed attempts####
+<pre class="r"><code>#map_dbl(&quot;r.squared&quot;)
+
+#failed attempts####
 #data %&gt;% map(unique(data$species), cv(data$x)) #nope
 #test &lt;-  sapply(names(data$species), cv(data$x)) #no
 #unlist(lapply(data$x, cv)) #no

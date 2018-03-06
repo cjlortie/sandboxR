@@ -61,7 +61,8 @@ tidy(models, fit)
 #solution c.
 data %>% split(.$species) %>%
   map(~ lm(y~x, data =.)) %>%
-  map(summary) 
+  map(summary) #%>%
+#map_dbl("r.squared")
 
 #failed attempts####
 #data %>% map(unique(data$species), cv(data$x)) #nope
