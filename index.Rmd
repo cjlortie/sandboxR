@@ -52,6 +52,11 @@ data %>%
   group_by(species) %>%
   summarise(cv(x)) 
 
+#alt using purrr::map
+data %>% 
+  split(.$species) %>% 
+  map(~ cv(.$x))
+
 #solution b. IF you are returning a list
 models <- data %>% 
   group_by(species) %>% 
