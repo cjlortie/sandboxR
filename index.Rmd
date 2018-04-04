@@ -85,7 +85,9 @@ data %>% split(.$species) %>%
 #map
 #lapply ugg
 
+```
 
-
+###Challenge 2. Applying function to y by x
+```{r, CH2, warning=FALSE, message=FALSE, echo=FALSE}
 
 ```
