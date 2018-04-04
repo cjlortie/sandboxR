@@ -121,6 +121,8 @@ rii <- function(x, var){
 
 rii.raw <- community %>% group_by(site, species) %>% do(variables=rii(., "abundance"))
 
+df <- data.frame(matrix(unlist(rii.raw), nrow=40, byrow=T),stringsAsFactors=FALSE)
+
 community.rii <- tidy(rii.raw, variables)
 data.frame(community.rii)
 
