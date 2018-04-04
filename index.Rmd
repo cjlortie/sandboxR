@@ -88,6 +88,40 @@ data %>% split(.$species) %>%
 ```
 
 ###Challenge 2. Applying function to y by x
+Doing any math on a vector that needs to be subsetted by another vector in dataframe such calculation of rii
+
 ```{r, CH2, warning=FALSE, message=FALSE, echo=FALSE}
+community <- read_csv("data/community.csv")
+community
+
+#solution a. rii base-R function
+
+rii <- function(x, j, var)
+{
+s1 <- subset(x, microsite == "shrub", select=var)
+o1 <- subset(x, microsite == "open", select=var)
+return1 <- (s1 - o1) / (s1+o1)
+x1 <- x[seq(1, nrow(x), by = 2),]
+return2 <- cbind(x1[j], return1)
+return2[is.na(return2)] <- 0
+return2
+}
+
+community.rii <- rii(community, 1:2, 4:6)
+community.rii
+
+#solution b. rii using dyplr and broom
+rii <- function(x, var){
+  s1 <- subset(x, microsite == "shrub", select=var)
+  o1 <- subset(x, microsite == "open", select=var)
+  return1 <- (s1 - o1) / (s1+o1)
+  return1[is.na(return1)] <- 0
+  return(return1)
+}
+
+rii.raw <- community %>% group_by(site, species) %>% do(variables=rii(., "abundance"))
+
+community.rii <- tidy(rii.raw, variables)
+data.frame(community.rii)
 
 ```
